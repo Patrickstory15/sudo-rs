@@ -17,20 +17,6 @@ use super::{
     Process, WithProcess,
 };
 
-/// Truncates or extends the underlying data
-pub trait SetLength {
-    /// After this is called, the underlying data will either be truncated
-    /// up to new_len bytes, or it will have been extended by zero bytes up to
-    /// new_len.
-    fn set_len(&mut self, new_len: usize) -> io::Result<()>;
-}
-
-impl SetLength for File {
-    fn set_len(&mut self, new_len: usize) -> io::Result<()> {
-        File::set_len(self, new_len as u64)
-    }
-}
-
 type BoolStorage = u8;
 
 const SIZE_OF_TS: i64 = std::mem::size_of::<SystemTime>() as i64;
@@ -329,6 +315,7 @@ pub enum TouchResult {
     NotFound,
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 pub enum CreateResult {
     /// The record was found and it was refreshed
     Updated {
@@ -584,26 +571,6 @@ mod tests {
 
     const TEST_USER_ID: UserId = 1000;
 
-    impl SetLength for Cursor<Vec<u8>> {
-        fn set_len(&mut self, new_len: usize) -> io::Result<()> {
-            self.get_mut().truncate(new_len);
-            while self.get_mut().len() < new_len {
-                self.get_mut().push(0);
-            }
-            Ok(())
-        }
-    }
-
-    impl SetLength for Cursor<&mut Vec<u8>> {
-        fn set_len(&mut self, new_len: usize) -> io::Result<()> {
-            self.get_mut().truncate(new_len);
-            while self.get_mut().len() < new_len {
-                self.get_mut().push(0);
-            }
-            Ok(())
-        }
-    }
-
     #[test]
     fn can_encode_and_decode() {
         let tty_sample = SessionRecord::new(
@@ -770,9 +737,10 @@ mod tests {
 
         std::thread::sleep(std::time::Duration::from_millis(1));
         let res = srf.create(tty_scope, auth_user).unwrap();
-        let CreateResult::Updated { .. } = res else {
+        let CreateResult::Updated { old_time, new_time } = res else {
             panic!("Expected record to be updated");
         };
+        assert_ne!(old_time, new_time);
 
         // reset the file
         assert!(srf.reset().is_ok());

@@ -7,8 +7,8 @@ A safety oriented and memory safe implementation of sudo and su written in Rust.
 Sudo-rs is being developed further; features you might expect from original sudo
 may still be unimplemented or not planned. If there is an important one you need,
 please request it using the issue tracker. If you encounter any usability bugs,
-also please report them on the [issue tracker](https://github.com/memorysafety/sudo-rs/issues).
-Suspected vulnerabilities can be reported on our [security page](https://github.com/memorysafety/sudo-rs/security).
+also please report them on the [issue tracker](https://github.com/trifectatechfoundation/sudo-rs/issues).
+Suspected vulnerabilities can be reported on our [security page](https://github.com/trifectatechfoundation/sudo-rs/security).
 
 An [audit of sudo-rs version 0.2.0](docs/audit/audit-report-sudo-rs.pdf) has been performed in August 2023.
 The findings from that audit are addressed in the current version.
@@ -20,6 +20,16 @@ or newer is necessary to run sudo-rs.
 
 The recommended way to start using `sudo-rs` is via the package manager of your Linux distribution.
 
+### Arch Linux
+
+Arch Linux can be installed via AUR [sudo-rs](https://aur.archlinux.org/packages/sudo-rs) or [sudo-rs-git](https://aur.archlinux.org/packages/sudo-rs-git).
+
+Note: [AUR usage help](https://wiki.archlinux.org/title/AUR_helpers)
+
+```sh
+yay -Syu sudo-rs
+```
+
 ### Debian/Ubuntu
 If you are running Debian 13 (trixie) or later, or Ubuntu 24.04 (Noble Numbat) or later, you can use:
 ```sh
@@ -30,7 +40,11 @@ via the usual commands `sudo` and `su` instead, prepend `/usr/lib/cargo/bin` to 
 
 ### Fedora
 
-For Fedora, we expect sudo-rs to be available via its package manager soon.
+If you are running Fedora 38 or later, you can use: 
+```sh
+sudo dnf install sudo-rs
+```
+This will offer the functionality using the commands `su-rs` and `sudo-rs`.
 
 ### Installing our pre-compiled x86-64 binaries
 
@@ -150,5 +164,6 @@ extract parts of our work in usable crates for other people.
 
 ## Sponsors
 
-The development of sudo-rs is an initiative of the [Prossimo project by ISRG](https://www.memorysafety.org/).
+The initial development of sudo-rs was started and funded by the [Internet Security Research Group](https://www.abetterinternet.org/) as part of the [Prossimo project](https://www.memorysafety.org/).
+
 An independent security audit of sudo-rs was made possible by the [NLNet Foundation](https://nlnet.nl/).

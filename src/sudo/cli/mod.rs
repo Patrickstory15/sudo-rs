@@ -10,6 +10,8 @@ pub mod help;
 #[cfg(test)]
 mod tests;
 
+// remove dead_code when sudoedit has been implemented
+#[allow(dead_code)]
 pub enum SudoAction {
     Edit(SudoEditOptions),
     Help(SudoHelpOptions),
@@ -80,6 +82,7 @@ impl SudoAction {
     }
 
     #[cfg(test)]
+    #[allow(clippy::result_large_err)]
     pub fn try_into_run(self) -> Result<SudoRunOptions, Self> {
         if let Self::Run(v) = self {
             Ok(v)
@@ -204,6 +207,7 @@ impl TryFrom<SudoOptions> for SudoValidateOptions {
 }
 
 // sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory] [-g group] [-h host] [-p prompt] [-R directory] [-T timeout] [-u user] file ...
+#[allow(dead_code)]
 pub struct SudoEditOptions {
     // -k
     pub reset_timestamp: bool,
